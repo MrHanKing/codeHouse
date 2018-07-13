@@ -137,9 +137,9 @@ cc.Class({
     
     refreshbtn:function(){
         var changjing = cc.vv.gameNetMgr.getChangJingTypeName();
-        // if (this.chose && changjing == "3D") {
-        //     this.chose.active = false;
-        // }
+        if (this.chose && changjing == "3D") {
+            this.chose.active = false;
+        }
 
         if(changjing == "2D" && this.PModel){
             this.btn_2D.getComponent(cc.Toggle).check();

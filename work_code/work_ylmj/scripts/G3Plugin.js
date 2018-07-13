@@ -299,7 +299,7 @@ cc.Class({
 
         if(cc.sys.os == cc.sys.OS_IOS){
             var type = this.getIosType(platfrom);
-            jsb.reflection.callStaticMethod(this._ios, "shareUrl:UrlTitle:Type:",url,title,type);
+            jsb.reflection.callStaticMethod(this._ios, "shareImg:Url:UrlTitle:Type:",imgurl,url,title,type);
         }
 
         this._share_call = func;
@@ -330,7 +330,8 @@ cc.Class({
         }
 
         if(cc.sys.os == cc.sys.OS_IOS){
-            jsb.reflection.callStaticMethod(this._ios, "shareImg:Type:","new_dairy_share",23);
+            var type = this.getIosType(platfrom);
+            jsb.reflection.callStaticMethod(this._ios, "shareImg:Type:", "new_dairy_share", type);
         }
 
         this._share_call = func;

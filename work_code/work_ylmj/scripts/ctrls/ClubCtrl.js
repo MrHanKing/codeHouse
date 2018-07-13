@@ -57,6 +57,7 @@ cc.Class({
         this.CreateRoom = this.node.getChildByName("CreateRoom");
         this.CreateRoom_btnsave = this.CreateRoom.getChildByName("btn_save");
         this.CreateRoom_btnok = this.CreateRoom.getChildByName("btn_ok");
+        this.club_method = this.clubLobby.getChildByName("club_method");
 
         this.userinfo = this.node.getChildByName("userinfo");
         this.btnClose = this.clubLobby.getChildByName("btn_back");
@@ -375,6 +376,12 @@ cc.Class({
         cc.vv.clubMgr.requestTableList();
     },
 
+    showClubMethod:function(params) {
+        var infoData = cc.vv.clubMgr.getDefaultTableInfo();
+
+        this.club_method.active = (!infoData || infoData == null);
+    },
+
     //创建俱乐部桌子列表
     refreshScrollViewClubTables:function() {
         var node = this.scrollViewTableList.content;
@@ -382,6 +389,8 @@ cc.Class({
         var clubname = this.getSelectedClubName();
         cc.log("创建了俱乐部的桌子 clubname:" + clubname)
         var data = cc.vv.clubMgr.clubTables[clubname];
+
+        this.showClubMethod();
         // let mPrefab = cc.instantiate(this.tableItem)
         // if (mPrefab && data && data.base_info) {
         //     //设置对象属性
@@ -392,11 +401,16 @@ cc.Class({
         if (!data) {
             return;
         }
+        
+        data.sort(function(a,b){
+           return b.create_time - a.create_time;
+        });
 
         for (let key in data){
             let mPrefab = cc.instantiate(this.tableItem)
             if (mPrefab && data[key] && data[key].base_info) {
                 //设置对象属性
+                mPrefab.active = false;
                 this.initTable(mPrefab, data[key]);//后续传入data
                 node.addChild(mPrefab);
             }
@@ -420,19 +434,21 @@ cc.Class({
             var num = idx + 1;
             var player = players.getChildByName("player" + num);
             var key = "user_id" + idx
-            var id = data[key];//服务器暂时没给数据
+            var id = data[key];
             if (id == 0) {
                 player.active = false;
-                continue;
             }else{
                 mannumber = mannumber + 1;
                 player.active = true;
             }
             //设置头像 名字
-            // var callback = function(info) {
-            //     player.getChildByName("name").getComponent(cc.Label).string = info.name;
-            // }
-            player.getComponent("ImageLoader").setUserID(id, null);    
+            var callback = function(info) {
+                // player.getChildByName("name").getComponent(cc.Label).string = info.name;
+                if (idx == 3) {
+                    tablePrefab.active = true;
+                }
+            }
+            player.getComponent("ImageLoader").setClubID(id, callback);    
         }
 
         //增加桌子上的按钮点击事件
@@ -443,10 +459,18 @@ cc.Class({
         //坐满的话 不能进入桌子
         if (mannumber == 4) {
             tablePrefab.getChildByName("txt_gameStatus").getComponent(cc.Label).string = "游戏中";
+            btnJoinGame.on("click", this.onBtnTableMan, this);
         }else{
             tablePrefab.getChildByName("txt_gameStatus").getComponent(cc.Label).string = "等待中";
             btnJoinGame.on("click", this.onBtnTable, this);
         }
+    },
+
+    onBtnTableMan:function(event) {
+        this.node_gameinfo.active = true;
+        this.btn_joingame.name = event.target.name;
+        var baseinfo_data = event.target.base_info;
+        this.node_gameinfo.getComponent("GameInfo3D").show(baseinfo_data);
     },
 
     onBtnTable:function(event) {
@@ -455,15 +479,17 @@ cc.Class({
         this.btn_joingame.name = event.target.name;
         var baseinfo_data = event.target.base_info;
 
-        this.node_gameinfo.getChildByName("t_game").getComponent(cc.Label).string = this.getGameNameByType(baseinfo_data.type);
-        this.node_gameinfo.getChildByName("t_jushu").getComponent(cc.Label).string = baseinfo_data.maxGames + "局";
-        this.node_gameinfo.getChildByName("t_wanfa").getComponent(cc.Label).string = this.getGameTypeDesByAttr(baseinfo_data.bbh);
-        this.node_gameinfo.getChildByName("t_fengding").getComponent(cc.Label).string = this.getGameMaxFanDes(baseinfo_data.maxFan);
-        this.node_gameinfo.getChildByName("t_hengfan").getComponent(cc.Label).string = this.getGameHengFan(baseinfo_data.hengfan);
-        this.node_gameinfo.getChildByName("t_pay").getComponent(cc.Label).string = this.getGameFuFeiDes(baseinfo_data.fplay);
+        this.node_gameinfo.getComponent("GameInfo3D").show(baseinfo_data, this, this.onTableBtnJoinGame, null, false, "ClubCtrl", "onTableBtnJoinGame")
 
-        this.btn_joingame.getComponent(cc.Button).clickEvents = [];
-        this.btn_joingame.on("click", this.onTableBtnJoinGame, this);
+        // this.node_gameinfo.getChildByName("t_game").getComponent(cc.Label).string = cc.vv.utils.getGameNameByType(baseinfo_data.type);
+        // this.node_gameinfo.getChildByName("t_jushu").getComponent(cc.Label).string = baseinfo_data.maxGames + "局";
+        // this.node_gameinfo.getChildByName("t_wanfa").getComponent(cc.Label).string = cc.vv.utils.getGameTypeDesByAttr(baseinfo_data.bbh);
+        // this.node_gameinfo.getChildByName("t_fengding").getComponent(cc.Label).string = cc.vv.utils.getGameMaxFanDes(baseinfo_data.maxFan);
+        // this.node_gameinfo.getChildByName("t_hengfan").getComponent(cc.Label).string = cc.vv.utils.getGameHengFan(baseinfo_data.hengfan);
+        // this.node_gameinfo.getChildByName("t_pay").getComponent(cc.Label).string = cc.vv.utils.getGameFuFeiDes(baseinfo_data.paytype, this.selectedClubName);
+
+        // this.btn_joingame.getComponent(cc.Button).clickEvents = [];
+        // this.btn_joingame.on("click", this.onTableBtnJoinGame, this);
     },
 
     onBtnCloseGameInfo:function(params) {
@@ -611,11 +637,12 @@ cc.Class({
 
     //加入桌子的游戏
     onTableBtnJoinGame:function(event) {
-        console.log("OnTableBtnJoinGame");
+        console.log("OnTableBtnJoinGame:" + event.target.name);
+        var self = this;
         if (this.isIInTables(event.target.name)) {
             cc.vv.gameNetMgr.loadGameScene();
         }else{
-            cc.vv.userMgr.enterRoom(Number(event.target.name),function(ret){
+            cc.vv.userMgr.enterRoom((event.target.name),function(ret){
                 cc.vv.ip_check = true;
                 if(ret.errcode == 0){
                 }
@@ -623,7 +650,7 @@ cc.Class({
                     
                     if (ret.errcode == 5){
                         cc.vv.alert.show("提示","钻石不足，加入房间失败!是否进入商城购买？",function(){
-                            cc.vv.hall.getComponent('Shop').onBtnShopClicked();
+                            self.showShop();
                         },true);  
                     }else{
                         var content = "房间["+ roomId +"]不存在，请重新输入!";
@@ -636,6 +663,14 @@ cc.Class({
                     cc.vv.hall.autoJoinRoom();
                 }
             }.bind(this)); 
+        }
+    },
+
+    showShop:function(params) {
+        if (!cc.vv.hall || !cc.vv.hall.isValid) {
+            cc.vv.userMgr.gotoHall(function(params) {
+                cc.vv.hall.getComponent('Shop').onBtnShopClicked();
+            })
         }
     },
 
@@ -1017,10 +1052,10 @@ cc.Class({
         var fufeides;
 
         if(data){
-            name = this.getGameNameByType(data.type);
-            typedes = this.getGameTypeDesByAttr(data.bbh);
-            ruledex = this.getGameRuleDes(data);
-            fufeides = this.getGameFuFeiDes(data.fplay)
+            name = cc.vv.utils.getGameNameByType(data.type);
+            typedes = cc.vv.utils.getGameTypeDesByAttr(data.bbh);
+            ruledex = cc.vv.utils.getGameRuleDes(data);
+            fufeides = cc.vv.utils.getGameFuFeiDes(data.paytype, this.selectedClubName)
         }else{
             name = "暂未设置";
             typedes = "";
@@ -1109,7 +1144,7 @@ cc.Class({
             cc.vv.tip.show("人数已达上限,不能再扩展了!");
             return;
         }
-        this.refreshChangeClubInfo(1, "消耗钻石增加人数上限", function(){
+        this.refreshChangeClubInfo(1, "消耗100钻石增加人数上限", function(){
             cc.vv.clubMgr.sendAddTablesOrMens(club_id, 2);
             that.onBtnChangeClubInfoView();
         }, "扩展人数上限");
@@ -1124,7 +1159,7 @@ cc.Class({
             cc.vv.tip.show("桌子已达上限,不能再扩展了!");
             return;
         }
-        this.refreshChangeClubInfo(1, "消耗钻石增加桌子上限", function(){
+        this.refreshChangeClubInfo(1, "消耗100钻石增加桌子上限", function(){
             cc.vv.clubMgr.sendAddTablesOrMens(club_id, 1);
             that.onBtnChangeClubInfoView();
         }, "扩张桌子上限");
@@ -1228,11 +1263,13 @@ cc.Class({
 
     //默认开房
     onBtnDefaultRoom:function(params) {
+        console.log("onBtnDefaultRoom");
         var infoData = cc.vv.clubMgr.getDefaultTableInfo();
-        this.node_gameinfo.getComponent("GameInfo3D").show(infoData, this, this.joinCallback, null, true)
+        this.node_gameinfo.getComponent("GameInfo3D").show(infoData, this, this.joinCallback, null, true, "ClubCtrl", "joinCallback")
     },
 
     joinCallback:function(params) {
+        console.log("joinCallback");
         this.CreateRoom.getComponent("CreateRoom").onBtnDefaultRoom();
     },
 

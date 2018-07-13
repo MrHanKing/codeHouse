@@ -56,15 +56,16 @@ cc.Class({
         if(!userid){
             return;
         }
-        if(cc.vv.images == null){
-            cc.vv.images = {};
-        }
         
         var self = this;
+
         getBaseInfo(userid,function(code,info){
            if(info && info.url){
                 self.loadImage(info.url,userid,function (err,spriteFrame) {
                     self._spriteFrame = spriteFrame;
+                    if (cc.vv.images) {
+                        cc.vv.images[userid] = spriteFrame;
+                    }
                     self.setupSpriteFrame();
                 });   
             }else{
@@ -73,6 +74,9 @@ cc.Class({
                 {
                     var spriteFrame = new cc.SpriteFrame(tex, cc.Rect(0, 0, tex.width, tex.height));
                     self._spriteFrame = spriteFrame;
+                    if (cc.vv.images) {
+                        cc.vv.images[userid] = spriteFrame;
+                    }
                     self.setupSpriteFrame();
                 });
             }
@@ -81,6 +85,43 @@ cc.Class({
                 setUseInfoCallback(info);
             }
         });
+    },
+
+    setClubID:function(userid, setUseInfoCallback) {
+        var self = this;
+        if(cc.vv.images == null){
+            cc.vv.images = {};
+        }
+
+        //直接读取本地 同步操作
+        if (cc.vv.images && cc.vv.images[userid]) {
+            self._spriteFrame = cc.vv.images[userid];
+            self.setupSpriteFrame();
+            if (setUseInfoCallback) {
+                setUseInfoCallback();
+            }
+            return;
+        }
+
+        //适应俱乐部桌子刷新
+        if (userid == 0 || !userid) {
+
+            cc.loader.loadRes('textures/YX_Public/icon_userhead', function( error, tex )
+            {
+                var spriteFrame = new cc.SpriteFrame(tex, cc.Rect(0, 0, tex.width, tex.height));
+                self._spriteFrame = spriteFrame;
+                if (cc.vv.images) {
+                    cc.vv.images[userid] = spriteFrame;
+                }
+                self.setupSpriteFrame();
+                if (setUseInfoCallback) {
+                    setUseInfoCallback();
+                }
+            });
+            return;
+        }
+
+        this.setUserID(userid, setUseInfoCallback);
     },
     
     setupSpriteFrame:function(){

@@ -51,7 +51,7 @@ cc.Class({
     //infoData 房间信息
     //joinCallback 加入房间的回调函数 param 回调参数[]
     //isCreateRoom bool 创建房间？
-    show(infoData, target, joinCallback, params, isCreateRoom){
+    show(infoData, target, joinCallback, params, isCreateRoom, component, handler){
         
         if (!infoData) {
             cc.vv.tip.show("没有默认的开房配置");
@@ -59,13 +59,13 @@ cc.Class({
         }
 
         this.node.active = true;
-
+        this.btn_joingame.clickEvents = [];
+        
         if (typeof(joinCallback) != "function") {
             this.btn_joingame.node.active = false;
         }else{
             this.btn_joingame.node.active = true;
-            this.btn_joingame.clickEvents = [];
-            this.btn_joingame.node.on('click', joinCallback, target);
+            cc.vv.utils.addClickEvent(this.btn_joingame.node, target.node, component, handler);
         }
 
         this.btn_joingame.node.getComponent(cc.Sprite).spriteFrame = isCreateRoom ? this.createRoomSp : this.enjoyRoomSp;

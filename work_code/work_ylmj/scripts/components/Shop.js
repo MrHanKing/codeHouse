@@ -24,6 +24,10 @@ cc.Class({
         //    readonly: false,    // optional, default is false
         // },
         // ...
+        zuanshitupian:{
+            default:[],
+            type:[cc.SpriteFrame]
+        },
         _shop:null,
         _viewlist:null,
         _content:null,
@@ -139,6 +143,7 @@ cc.Class({
                 shopTip.getChildByName("Shoptip").getComponent(cc.Label).string =  data[i].regulations_info;
             }
 
+            node.getChildByName("OriginalPrice").active = false;
             node.getChildByName("OriginalPrice").getComponent(cc.Label).string = "原价：1钻=" + data[i].original_price/100 + "元";
 
             var diamondNum = 0;
@@ -147,7 +152,11 @@ cc.Class({
             }else{
                 diamondNum = data[i].diamond;
             }
+
+            node.getChildByName("CurrentPrice").active = false;
             node.getChildByName("CurrentPrice").getComponent(cc.Label).string = "现价：1钻=" + ((data[i].cash/100) / diamondNum).toFixed(2) + "元";
+
+            node.getChildByName("Diamond").getComponent(cc.Sprite).spriteFrame = this.zuanshitupian[i];
 
             var btnOp = node.getChildByName("Button_ShopOk");
             btnOp.idx = data[i].id;
@@ -237,7 +246,7 @@ cc.Class({
             // var pay_type_list = cc.vv.userMgr.pay_type_list.split(',');
             var pay_type_list = cc.vv.userMgr.pay_type_list;
 
-            for(var i=0;i<2;i++){
+            for(var i=0;i<1;i++){
                 list.getChildByName('btn_' + i).active = pay_type_list[index+i] !="0";
                 list.getChildByName('btn_' + i).pay_data = i + 1;
             }

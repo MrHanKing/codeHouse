@@ -191,12 +191,12 @@ cc.Class({
                     titleContFZ = "4局(钻石x4)";
                 }
                 else if(i == 2){
-                    titleContAA = "8局(钻石x2)";
-                    titleContFZ = "8局(钻石x8)";
+                    titleContAA = "8局(钻石x1)";
+                    titleContFZ = "8局(钻石x4)";
                 }
                 else if(i == 3){
-                    titleContAA = "16局(钻石x4)";
-                    titleContFZ = "16局(钻石x16)";
+                    titleContAA = "16局(钻石x2)";
+                    titleContFZ = "16局(钻石x8)";
                 }
                 //AA制
                 if(fufei == 0){
@@ -225,10 +225,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"1";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"2";
+                payinfoCont = payinfoCont +"1";
             }
             else{
-                payinfoCont = payinfoCont +"4";
+                payinfoCont = payinfoCont +"2";
             }
         }
         else{
@@ -237,10 +237,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"4";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"8";
+                payinfoCont = payinfoCont +"4";
             }
             else{
-                payinfoCont = payinfoCont +"16";
+                payinfoCont = payinfoCont +"8";
             }
         }
         payinfoCont = payinfoCont + "颗钻石";
@@ -522,12 +522,12 @@ cc.Class({
                     titleContFZ = "4局(钻石x4)";
                 }
                 else if(i == 2){
-                    titleContAA = "8局(钻石x2)";
-                    titleContFZ = "8局(钻石x8)";
+                    titleContAA = "8局(钻石x1)";
+                    titleContFZ = "8局(钻石x4)";
                 }
                 else if(i == 3){
-                    titleContAA = "16局(钻石x4)";
-                    titleContFZ = "16局(钻石x16)";
+                    titleContAA = "16局(钻石x2)";
+                    titleContFZ = "16局(钻石x8)";
                 }
                 //AA制
                 if(fufei == 0){
@@ -543,7 +543,7 @@ cc.Class({
         for(var i = 0; i < this._jushuxuanze.length; ++i){
             this._jushuxuanze[i].check(false);
         }
-        this._jushuxuanze[0].check(true);
+        this._jushuxuanze[1].check(true);
 
         var payinfo = this.node.getChildByName("bg").getChildByName("payinfo").getComponent(cc.Label);
         var payinfoCont = null;
@@ -554,10 +554,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"1";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"2";
+                payinfoCont = payinfoCont +"1";
             }
             else{
-                payinfoCont = payinfoCont +"4";
+                payinfoCont = payinfoCont +"2";
             }
         }
         else{
@@ -566,10 +566,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"4";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"8";
+                payinfoCont = payinfoCont +"4";
             }
             else{
-                payinfoCont = payinfoCont +"16";
+                payinfoCont = payinfoCont +"8";
             }
         }
         payinfoCont = payinfoCont +"颗钻石";
@@ -648,12 +648,12 @@ cc.Class({
                     titleContFZ = "4局(钻石x4)";
                 }
                 else if(i == 2){
-                    titleContAA = "8局(钻石x2)";
-                    titleContFZ = "8局(钻石x8)";
+                    titleContAA = "8局(钻石x1)";
+                    titleContFZ = "8局(钻石x4)";
                 }
                 else if(i == 3){
-                    titleContAA = "16局(钻石x4)";
-                    titleContFZ = "16局(钻石x16)";
+                    titleContAA = "16局(钻石x2)";
+                    titleContFZ = "16局(钻石x8)";
                 }
                 //AA制
                 if(fufei == 0){
@@ -674,10 +674,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"1";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"2";
+                payinfoCont = payinfoCont +"1";
             }
             else{
-                payinfoCont = payinfoCont +"4";
+                payinfoCont = payinfoCont +"2";
             }
         }
         else{
@@ -691,10 +691,10 @@ cc.Class({
                 payinfoCont = payinfoCont +"4";
             }
             else if(jushuxuanze == 1){
-                payinfoCont = payinfoCont +"8";
+                payinfoCont = payinfoCont +"4";
             }
             else{
-                payinfoCont = payinfoCont +"16";
+                payinfoCont = payinfoCont +"8";
             }
         }
         payinfoCont = payinfoCont +"颗钻石";

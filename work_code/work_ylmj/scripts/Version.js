@@ -1,2 +1,2 @@
-cc.VERSION = 'V1.0.15';
+cc.VERSION = 'V1.0.22';
 cc.PROTOCOL_VERSION = '122';

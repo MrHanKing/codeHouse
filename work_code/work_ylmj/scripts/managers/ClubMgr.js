@@ -492,6 +492,7 @@ cc.Class({
             cc.log(ret);
             if (ret.errcode != 0) {
                 cc.log("error :" + ret.errmsg);
+                cc.vv.tip.show(ret.errmsg);
                 return;
             }
             cc.vv.tip.show("成员身份修改成功");
@@ -536,7 +537,7 @@ cc.Class({
 
             cc.vv.tip.show("" + message);
             if(mtype == 1){
-                that.myClubs[club_id].max_count = 100;
+                that.myClubs[club_id].max_count = 30;
             }else{
                 that.myClubs[club_id].max_mem = 300;
             }

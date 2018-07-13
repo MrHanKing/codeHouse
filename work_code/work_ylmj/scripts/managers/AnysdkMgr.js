@@ -117,7 +117,7 @@ cc.Class({
         }
 
         var self = this;
-        var height = 320;
+        var height = 640;
         var scale = height/size.height;
         var width = Math.floor(size.width * scale);
         var callbackFun = function(params) {

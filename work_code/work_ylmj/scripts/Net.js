@@ -17,7 +17,7 @@ var Global = cc.Class({
             }
 
             var handler = function(data){
-                // cc.log(event + "(" + typeof(data) + "):" + (data? data.toString():"null"));
+                cc.log(event + "(" + typeof(data) + "):" + (data? data.toString():"null"));
                 if(event != "disconnect" && typeof(data) == "string"){
                     data = JSON.parse(data);
                 }
@@ -101,6 +101,7 @@ var Global = cc.Class({
             }   
         },
         send:function(event,data){
+            cc.log("send:" + event);
             if(this.sio.connected){
                 if(data != null && (typeof(data) == "object")){
                     data = JSON.stringify(data);

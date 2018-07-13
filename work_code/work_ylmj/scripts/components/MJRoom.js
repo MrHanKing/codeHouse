@@ -135,20 +135,23 @@ cc.Class({
             this.btn_menu_node.active = !cc.vv.replayMgr.isReplay();
             var btn_menu_exit = this.node.getChildByName("menu").getChildByName("btnExit");
             var btn_menu_other_exit = this.node.getChildByName("menu").getChildByName("btnOtherExit");
-            btn_menu_other_exit.active = !cc.vv.gameNetMgr.isOwner() && isIdle;
-            btn_menu_exit.active = cc.vv.gameNetMgr.isOwner() && isIdle;
-            //游戏进行的时候直接显示解散房间按钮
-            if (!btn_menu_other_exit.active && !btn_menu_exit.active) {
-                btn_menu_exit.active = true;
+            //俱乐部 自动开桌处理
+            if (!cc.vv.gameNetMgr.conf.creator) {
+                btn_menu_other_exit.active = isIdle;
+                btnDispress.active = false;
+            }else{
+                //正常开房判断
+                btn_menu_other_exit.active = !cc.vv.gameNetMgr.isOwner() && isIdle;
+                btnDispress.active = cc.vv.gameNetMgr.isOwner() && isIdle;
             }
+            btn_menu_exit.active = !btn_menu_other_exit.active;
         }else{
             //房间加入者，退出房间
             btnExit.active = !cc.vv.gameNetMgr.isOwner() && isIdle;
             btnBack.active = cc.vv.gameNetMgr.isOwner() && isIdle;
+            //房间创建者，退出房间
+            btnDispress.active = cc.vv.gameNetMgr.isOwner() && isIdle;
         }
-
-        //房间创建者，退出房间
-        btnDispress.active = cc.vv.gameNetMgr.isOwner() && isIdle;
        
         btnWeichat.active = isIdle;     
     },

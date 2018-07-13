@@ -186,6 +186,7 @@ cc.Class({
             cc.sys.localStorage.setItem("pop_active",day);    
 
             cc.find('Canvas/active').active = true;
+            this.getBindInfo();
         }
 
         //如果没有在大厅弹过提示
@@ -224,7 +225,7 @@ cc.Class({
     },
 
     //实名认证
-    onButtonRealNameClick:function(){
+    onButtonRealNameClick:function(){  
         cc.vv.audioMgr.playSFX("ui_click.mp3");
         this.realName.active = true;
     },
@@ -413,10 +414,10 @@ cc.Class({
          
         var self = this;
         var onGet = function(ret){
-            self.txt_manNum.getComponent(cc.Label).string = (typeof(ret.gems) == "number") ? ret.gems : 0;
-            self.txt_gemsNum.getComponent(cc.Label).string = (typeof(ret.true_invite) == "number") ? ret.true_invite : 0
+            self.txt_manNum.getComponent(cc.Label).string = (typeof(ret.true_invite) == "number") ? ret.true_invite : 0;
+            self.txt_gemsNum.getComponent(cc.Label).string = (typeof(ret.gems) == "number") ? ret.gems : 0;
         };
-         
+        
         var data = {
             userId:cc.vv.userMgr.userId,
         };
@@ -586,6 +587,7 @@ cc.Class({
         else if(event.target.name == "btn_huodong")
         {
             this.huodongWin.active = true;
+            this.getBindInfo();
         }
         else if(event.target.name == "btn_tuiguang")
         {

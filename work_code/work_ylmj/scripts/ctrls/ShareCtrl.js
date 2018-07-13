@@ -80,9 +80,9 @@ cc.Class({
     hallToShowBattleReward:function(idx){
         var title = "梧桐棋牌-回放码-" + idx + cc.vv.userMgr.userId + " 点击复制";
         var text = cc.vv.userMgr.userName + "分享了一个回放码：" +  idx + cc.vv.userMgr.userId + ",在大厅点击战绩/回放码按钮，并输入相应回放码。";
-
+        var imageurl = "https://fir.im/mdy3";
         var url = 'http://wtmjhot.legaogame.com/api/user/share?share=' + idx + cc.vv.userMgr.userId;
-        cc.vv.g3Plugin.shareWeb(1,title,text,url,url,null);
+        cc.vv.g3Plugin.shareWeb(1,title,text,imageurl,url,null);
     },
 
     //游戏内邀请好友
@@ -95,9 +95,9 @@ cc.Class({
         // cc.vv.anysdkMgr.share(title,"玩法:" + cc.vv.gameNetMgr.getWanfa(),'0','2','');
         var url = "http://www.legaogame.com/web/ahjzmj/mj/wtmj/index.html";
         //现在没有 后面采用图片远程url
-        var imageurl = "";
+        var imageurl = "https://fir.im/mdy3";
         // var imgPath = jsb.fileUtils.fullPathForFilename('res/raw-assets/resources/textures/public/icon.png');
-        cc.vv.g3Plugin.shareWeb(1,title,txt_des,url,url,null);
+        cc.vv.g3Plugin.shareWeb(1,title,txt_des,imageurl,url,null);
     },
 
     //游戏内战绩分享

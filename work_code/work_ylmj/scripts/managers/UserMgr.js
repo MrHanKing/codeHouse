@@ -45,11 +45,14 @@ cc.Class({
         cc.vv.http.sendRequest("/guest",{account:account},this.onAuth);
     },
 
-    gotoHall:function(){
+    gotoHall:function(callback){
         cc.vv.wc.show("正在进入大厅中");
         cc.director.loadScene("hall",function(){
             cc.vv.hall.autoFunction();
             cc.vv.wc.hide();
+            if (callback) {
+                callback();
+            }
         });
     },
 
