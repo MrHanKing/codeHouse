@@ -39,6 +39,9 @@ export default class Basketball extends cc.Component {
 
     //游戏状态
     _gameResult: boolean = false;
+    _oldPos: cc.Vec2 = null;
+    //场景大小
+    // windowSize: cc.Size = cc.director.getWinSize()
 
     _basketBallConfig: any[] = [
         {"ballNum": 10, "time": 30, "des": "第一关:30秒进10个球获胜"},
@@ -48,6 +51,7 @@ export default class Basketball extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     
     onLoad () {
+        this._oldPos = this.node.getPosition();
         this.initTouchEvent();
         this.resetGame();
     }
@@ -72,7 +76,14 @@ export default class Basketball extends cc.Component {
             this.setScoreLabel(0)
             this.setTimeLable(data.time);
             this.randomBasketBallPos();
+            this.setUiShow(true);
         }
+    }
+
+    setUiShow(isshow:boolean){
+        this.scoreLabel.node.active = isshow;
+        this.timeLabel.node.active = isshow;
+        this.gameDes.node.active = isshow;
     }
 
     initTouchEvent(){
@@ -156,12 +167,28 @@ export default class Basketball extends cc.Component {
     onBtnNext(){
         this._nowBoss = this._nowBoss + 1;
         if (this._nowBoss >= this._basketBallConfig.length) {
-            this._nowBoss = 0
+            //最后关直接前往第一关
+            this._nowBoss = 0;
         }
-        this.resetGame();
+        this.runAnimaToNextLevel();
     }
 
     onBtnReGame(){
+        this.resetGame();
+    }
+
+    runAnimaToNextLevel(){
+        this.setUiShow(false);
+        this.resultNode.active = false;
+        let width = this.node.getContentSize().width;
+        this.node.runAction(cc.sequence(
+            cc.moveBy(2, cc.p(-width, 0)),
+            cc.callFunc(this.runOverCallBack, this)
+        ))
+    }
+
+    runOverCallBack(){
+        this.node.setPosition(this._oldPos);
         this.resetGame();
     }
 }
