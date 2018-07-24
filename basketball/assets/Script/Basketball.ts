@@ -14,36 +14,36 @@ const {ccclass, property} = cc._decorator;
 export default class Basketball extends cc.Component {
 
     @property(cc.Node)
-    basketballNode: cc.Node = null;
+    public basketballNode: cc.Node = null;
     @property(cc.Node)
-    randRect: cc.Node = null;
+    public randRect: cc.Node = null;
     @property(cc.Node)
-    basketRect: cc.Node = null;
+    public basketRect: cc.Node = null;
     @property(cc.Node)
-    resultNode: cc.Node = null;
+    public resultNode: cc.Node = null;
 
     @property(cc.Label)
-    scoreLabel: cc.Label = null;
+    public scoreLabel: cc.Label = null;
     @property(cc.Label)
-    timeLabel: cc.Label = null;
+    public timeLabel: cc.Label = null;
     @property(cc.Label)
-    gameDes:cc.Label = null;
+    public gameDes:cc.Label = null;
 
-    _isBallTouch: boolean = false;
+    private _isBallTouch: boolean = false;
     //得分距离
-    _getScoreDis: number = 50;
-    _score: number = 0;
-    _runtime: number = 0;
+    private _getScoreDis: number = 50;
+    private _score: number = 0;
+    private _runtime: number = 0;
     //当前关卡
-    _nowBoss: number = 0;
+    private _nowBoss: number = 0;
 
     //游戏状态
-    _gameResult: boolean = false;
-    _oldPos: cc.Vec2 = null;
+    private _gameResult: boolean = false;
+    private _oldPos: cc.Vec2 = null;
     //场景大小
     // windowSize: cc.Size = cc.director.getWinSize()
 
-    _basketBallConfig: any[] = [
+    private _basketBallConfig: any[] = [
         {"ballNum": 10, "time": 30, "des": "第一关:30秒进10个球获胜"},
         {"ballNum": 8, "time": 20, "des": "第二关:20秒进8个球获胜"},
         {"ballNum": 5, "time": 10, "des": "第三关:10秒进5个球获胜"}
@@ -56,19 +56,19 @@ export default class Basketball extends cc.Component {
         this.resetGame();
     }
 
-    randomBasketBallPos(){
+    private randomBasketBallPos(){
         // 随机出现在屏幕上指定球场区域内
         const x = this.randRect.width * (Math.random() - .5);
         const y = this.randRect.height * (Math.random() - .5);
-        let pos = this.basketballNode.parent.convertToNodeSpaceAR(this.randRect.convertToWorldSpaceAR(cc.v2(x, y)));
+        const pos = this.basketballNode.parent.convertToNodeSpaceAR(this.randRect.convertToWorldSpaceAR(cc.v2(x, y)));
         this.basketballNode.setPosition(pos);
     }
 
     //重新开始
-    resetGame(){
+    private resetGame(){
         this._gameResult = false;
         this.resultNode.active = false;
-        let data = this._basketBallConfig[this._nowBoss];
+        const data = this._basketBallConfig[this._nowBoss];
         if (data) {
             this._score = 0;
             this._runtime = data.time;
@@ -80,30 +80,30 @@ export default class Basketball extends cc.Component {
         }
     }
 
-    setUiShow(isshow:boolean){
+    private setUiShow(isshow:boolean){
         this.scoreLabel.node.active = isshow;
         this.timeLabel.node.active = isshow;
         this.gameDes.node.active = isshow;
     }
 
-    initTouchEvent(){
+    private initTouchEvent(){
         this.basketballNode.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
         this.basketballNode.on(cc.Node.EventType.TOUCH_MOVE, this.touchMove, this);
         this.basketballNode.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
         this.basketballNode.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
     }
 
-    touchStart(event:cc.Event.EventTouch){
+    private touchStart(event:cc.Event.EventTouch){
         this._isBallTouch = true;
     }
 
-    touchMove(event:cc.Event.EventTouch) {
+    private touchMove(event:cc.Event.EventTouch) {
         if (this._isBallTouch) {
             this.basketballNode.setPosition(this.basketballNode.parent.convertTouchToNodeSpaceAR(event.touch));
         }
     }
 
-    touchEnd(event:cc.Event.EventTouch) {
+    private touchEnd(event:cc.Event.EventTouch) {
         this._isBallTouch = false;
         if (this.getDistance(this.basketballNode, this.basketRect) < this._getScoreDis) {
             this.getScore();
@@ -111,19 +111,19 @@ export default class Basketball extends cc.Component {
         }
     }
 
-    touchCancel(event:cc.Event.EventTouch) {
+    private touchCancel(event:cc.Event.EventTouch) {
         this._isBallTouch = false;
     }
     // start () {}
 
-    getDistance(node1:cc.Node, node2:cc.Node){
-        let pos1 = node1.getPosition();
-        let pos2 = node2.getPosition();
-        let distance = cc.pDistance(pos1, pos2);
+    private getDistance(node1:cc.Node, node2:cc.Node): number{
+        const pos1 = node1.getPosition();
+        const pos2 = node2.getPosition();
+        const distance = cc.pDistance(pos1, pos2);
         return distance;
     }
 
-    getScore(){
+    private getScore(){
         this._score = this._score + 1;
         this.setScoreLabel(this._score);
         if (this._score >= this._basketBallConfig[this._nowBoss].ballNum) {
@@ -131,11 +131,11 @@ export default class Basketball extends cc.Component {
         }
     }
 
-    setTimeLable(time:number){
+    private setTimeLable(time:number){
         this.timeLabel.string = (time >= 0) ? "剩余时间:" + time.toFixed(1) : "剩余时间:0";
     }
 
-    setScoreLabel(score:number){
+    private setScoreLabel(score:number){
         this.scoreLabel.string = "得分:" + score;
     }
 
@@ -151,7 +151,7 @@ export default class Basketball extends cc.Component {
     }
 
     //type 1 胜利 2 失败
-    gameResult(type:number = 2){
+    private gameResult(type:number = 2){
         this._gameResult = true;
         let des:string = "";
         if (type === 1) {
@@ -164,7 +164,7 @@ export default class Basketball extends cc.Component {
         this.resultNode.active = true;
     }
 
-    onBtnNext(){
+    public onBtnNext(){
         this._nowBoss = this._nowBoss + 1;
         if (this._nowBoss >= this._basketBallConfig.length) {
             //最后关直接前往第一关
@@ -173,11 +173,11 @@ export default class Basketball extends cc.Component {
         this.runAnimaToNextLevel();
     }
 
-    onBtnReGame(){
+    public onBtnReGame(){
         this.resetGame();
     }
 
-    runAnimaToNextLevel(){
+    private runAnimaToNextLevel(){
         this.setUiShow(false);
         this.resultNode.active = false;
         let width = this.node.getContentSize().width;
@@ -187,7 +187,7 @@ export default class Basketball extends cc.Component {
         ))
     }
 
-    runOverCallBack(){
+    private runOverCallBack(){
         this.node.setPosition(this._oldPos);
         this.resetGame();
     }
