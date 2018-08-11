@@ -9,7 +9,7 @@ public class Maze:MonoBehaviour {
     // 随机坐标
     private IntVec2 RandomCoordinate{
         get{
-            return new IntVec2(Random.range(0, size.x), Random.range(0, size.z));
+            return new IntVec2(Random.Range(0, size.x), Random.Range(0, size.z));
         }
     }
 
